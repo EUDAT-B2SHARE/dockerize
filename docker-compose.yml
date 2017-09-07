@@ -27,6 +27,7 @@ services:
             - "B2SHARE_CACHE_REDIS_URL='redis://redis:6379/0'"
             - "B2SHARE_ACCOUNTS_SESSION_REDIS_URL='redis://redis:6379/1'"
             - "B2SHARE_BROKER_URL='amqp://${B2SHARE_RABBITMQ_USER}:${B2SHARE_RABBITMQ_PASS}@mq:5672/'"
+            - "B2SHARE_CELERY_BROKER_URL='amqp://${B2SHARE_RABBITMQ_USER}:${B2SHARE_RABBITMQ_PASS}@mq:5672/'"
             - "B2SHARE_CELERY_RESULT_BACKEND='redis://redis:6379/2'"
             - "B2SHARE_SEARCH_ELASTIC_HOSTS='elasticsearch'"
         volumes:
