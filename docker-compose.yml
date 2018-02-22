@@ -12,7 +12,7 @@ services:
             - "5432"
 
     b2share:
-        image: eudatb2share/b2share:2.0.1
+        image: eudatb2share/b2share:2.1.1
         environment:
             - "B2ACCESS_CONSUMER_KEY=${B2ACCESS_CONSUMER_KEY}"
             - "B2ACCESS_SECRET_KEY=${B2ACCESS_SECRET_KEY}"
