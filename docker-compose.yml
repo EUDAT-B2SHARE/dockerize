@@ -32,6 +32,7 @@ services:
             - "B2SHARE_SEARCH_ELASTIC_HOSTS='elasticsearch'"
         volumes:
             - "${B2SHARE_DATADIR}/b2share-data:/usr/var/b2share-instance"
+            - "${PWD}/b2share.sh:/eudat/b2share.sh"
         expose:
             - "5000"
         links:
