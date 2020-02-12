@@ -106,3 +106,12 @@ services:
     #         - redis
     #         - postgres
     #         - mq
+
+    # backup:
+    #     build: backup
+    #     environment:
+    #         - "PGPASSWORD=${B2SHARE_POSTGRESQL_PASSWORD}"
+    #         - "POSTGRES_USER=${B2SHARE_POSTGRESQL_USER}"
+    #     volumes:
+    #         - "${B2SHARE_DATADIR}/db_dump:/usr/local/share/pgsql_dumps"
+
