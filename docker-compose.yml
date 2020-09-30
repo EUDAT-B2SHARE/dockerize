@@ -1,18 +1,21 @@
-version: '2'
+version: '2.3'
 services:
     postgres:
-        image: postgres:9.6.2
+        image: postgres:9.6
         environment:
             - "POSTGRES_PASSWORD=${B2SHARE_POSTGRESQL_PASSWORD}"
             - "POSTGRES_USER=${B2SHARE_POSTGRESQL_USER}"
+            - "POSTGRES_DB=${B2SHARE_POSTGRESQL_DBNAME}"
             - "PGDATA=/var/lib/postgresql/data"
         volumes:
             - "${B2SHARE_DATADIR}/postgres-data:/var/lib/postgresql/data"
         expose:
             - "5432"
 
-    b2share:
-        image: eudatb2share/b2share:2.1.3
+    b2share-base:
+        image: eudatb2share/b2share:2.1.5
+        command:
+            - /bin/echo
         environment:
             - "B2ACCESS_CONSUMER_KEY=${B2ACCESS_CONSUMER_KEY}"
             - "B2ACCESS_SECRET_KEY=${B2ACCESS_SECRET_KEY}"
@@ -32,15 +35,22 @@ services:
             - "B2SHARE_SEARCH_ELASTIC_HOSTS='elasticsearch'"
         volumes:
             - "${B2SHARE_DATADIR}/b2share-data:/usr/var/b2share-instance"
+
+    b2share:
+        extends: b2share-base
+        command:
+            - /eudat/b2share.sh
         expose:
             - "5000"
         links:
             - elasticsearch
             - redis
             - postgres
-
+            - mq
+            
     elasticsearch:
         build: elasticsearch
+        image: eudatb2share/elasticsearch:2.2
         expose:
             - "9200"
             - "9300"
@@ -48,7 +58,7 @@ services:
             - "${B2SHARE_DATADIR}/elasticsearch-data:/usr/share/elasticsearch/data"
 
     redis:
-        image: redis:3.2-alpine
+        image: redis:5-alpine
         expose:
             - "6379"
         volumes:
@@ -56,6 +66,7 @@ services:
 
     nginx:
         build: nginx
+        image: eudatb2share/nginx:1.18
         ports:
             - "80:80"
             - "443:443"
@@ -65,8 +76,7 @@ services:
             - b2share
 
     mq:
-        hostname: b2share-redis
-        image: rabbitmq:3.6-management-alpine
+        image: rabbitmq:3.8-management-alpine
         environment:
             - "RABBITMQ_DEFAULT_USER=${B2SHARE_RABBITMQ_USER}"
             - "RABBITMQ_DEFAULT_PASS=${B2SHARE_RABBITMQ_PASS}"
@@ -75,3 +85,24 @@ services:
             - "5672"
         volumes:
             - "${B2SHARE_DATADIR}/rabbitmq-data:/var/lib/rabbitmq"
+
+    # b2share-test:
+    #     extends: b2share-base
+    #     environment:
+    #         - "DEBUG=True"
+    #         - "FLASK_ENV=Development"
+    #         - "FLASK_DEBUG=1"
+    #     command:
+    #         - /bin/sh
+    #         - -c
+    #         - |
+    #           # Install test-dependencies and run tests
+    #           pip install -e /eudat/b2share/.[all]
+    #           /eudat/b2share/run_tests.sh
+    #     expose:
+    #         - "5001"
+    #     links:
+    #         - elasticsearch
+    #         - redis
+    #         - postgres
+    #         - mq
