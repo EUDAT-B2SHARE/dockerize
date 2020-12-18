@@ -13,7 +13,7 @@ services:
             - "5432"
 
     b2share-base:
-        image: eudatb2share/b2share:2.1.5
+        image: eudatb2share/b2share:2.1.6
         command:
             - /bin/echo
         environment:
