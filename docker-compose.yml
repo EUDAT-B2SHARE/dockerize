@@ -1,7 +1,7 @@
 version: '2.3'
 services:
     postgres:
-        image: postgres:9.6
+        image: postgres:13
         environment:
             - "POSTGRES_PASSWORD=${B2SHARE_POSTGRESQL_PASSWORD}"
             - "POSTGRES_USER=${B2SHARE_POSTGRESQL_USER}"
@@ -13,10 +13,11 @@ services:
             - "5432"
 
     b2share-base:
-        image: eudatb2share/b2share:2.2.0
+        image: eudatb2share/b2share:2.2.5
         command:
             - /bin/echo
         environment:
+            # If used with b2share configloader, add B2SHARE_ in front of every variable that does not allready have it
             - "B2ACCESS_CONSUMER_KEY=${B2ACCESS_CONSUMER_KEY}"
             - "B2ACCESS_SECRET_KEY=${B2ACCESS_SECRET_KEY}"
             - "USE_STAGING_B2ACCESS=${USE_STAGING_B2ACCESS}"
@@ -35,6 +36,8 @@ services:
             - "B2SHARE_SEARCH_ELASTIC_HOSTS='elasticsearch'"
         volumes:
             - "${B2SHARE_DATADIR}/b2share-data:/usr/var/b2share-instance"
+            - "./elasticsearch/mappings/record-view:/usr/local/lib/python3.6/site-packages/invenio_stats/contrib/record_view/v2"
+            - "./elasticsearch/mappings/file-download:/usr/local/lib/python3.6/site-packages/invenio_stats/contrib/file_download/v2"
 
     b2share:
         extends: b2share-base
@@ -50,7 +53,11 @@ services:
 
     elasticsearch:
         build: elasticsearch
-        image: eudatb2share/elasticsearch:2.2
+        image: eudatb2share/elasticsearch:2.4.6
+        environment:
+            # Set options for elasticsearch memory usage
+            - bootstrap.memory_lock=true
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
         expose:
             - "9200"
             - "9300"
