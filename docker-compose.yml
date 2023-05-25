@@ -38,6 +38,7 @@ services:
             - "${B2SHARE_DATADIR}/b2share-data:/usr/var/b2share-instance"
             - "./elasticsearch/mappings/record-view:/usr/local/lib/python3.6/site-packages/invenio_stats/contrib/record_view/v2"
             - "./elasticsearch/mappings/file-download:/usr/local/lib/python3.6/site-packages/invenio_stats/contrib/file_download/v2"
+            - "./elasticsearch/mappings/record-view-agg:/usr/local/lib/python3.6/site-packages/invenio_stats/contrib/aggregations/aggr_record_view/v2"
 
     b2share:
         extends: b2share-base
@@ -121,4 +122,3 @@ services:
     #         - "POSTGRES_USER=${B2SHARE_POSTGRESQL_USER}"
     #     volumes:
     #         - "${B2SHARE_DATADIR}/db_dump:/usr/local/share/pgsql_dumps"
-
