@@ -7,6 +7,14 @@ cp b2share.env .env
 docker-compose up
 ```
 
+## Troubleshooting
+
+If you get access right errors from Elasticsearch like `Unable to access 'path.data' (/usr/share/elasticsearch/data/elasticsearch)`
+should create and chown ./data/elasticsearch-data : 
+
+`$ chown 101:101 ./data/elasticsearch-data/`
+
+
 ## Usage with B2SHARE configloader
 
 With B2SHARE v2.3.0 a new configuration loader has been introduced. Because of this, all environment variables for b2share image has to start with prefix `B2SHARE_`
