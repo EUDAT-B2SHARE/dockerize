@@ -13,7 +13,7 @@ services:
             - "5432"
 
     b2share-base:
-        image: eudatb2share/b2share:2.2.5
+        image: eudatb2share/b2share:2.4.0
         command:
             - /bin/echo
         environment:
@@ -34,6 +34,7 @@ services:
             - "B2SHARE_CELERY_BROKER_URL='amqp://${B2SHARE_RABBITMQ_USER}:${B2SHARE_RABBITMQ_PASS}@mq:5672/'"
             - "B2SHARE_CELERY_RESULT_BACKEND='redis://redis:6379/2'"
             - "B2SHARE_SEARCH_ELASTIC_HOSTS='elasticsearch'"
+            - "B2SHARE_LOGGING_LEVEL=${B2SHARE_LOGGING_LEVEL}"
         volumes:
             - "${B2SHARE_DATADIR}/b2share-data:/usr/var/b2share-instance"
             - "./elasticsearch/mappings/record-view:/usr/local/lib/python3.6/site-packages/invenio_stats/contrib/record_view/v2"
