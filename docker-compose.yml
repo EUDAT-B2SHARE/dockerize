@@ -18,9 +18,9 @@ services:
             - /bin/echo
         environment:
             # If used with b2share configloader, add B2SHARE_ in front of every variable that does not allready have it
-            - "B2ACCESS_CONSUMER_KEY=${B2ACCESS_CONSUMER_KEY}"
-            - "B2ACCESS_SECRET_KEY=${B2ACCESS_SECRET_KEY}"
-            - "USE_STAGING_B2ACCESS=${USE_STAGING_B2ACCESS}"
+            - "B2SHARE_B2ACCESS_CONSUMER_KEY=${B2ACCESS_CONSUMER_KEY}"
+            - "B2SHARE_B2ACCESS_SECRET_KEY=${B2ACCESS_SECRET_KEY}"
+            - "B2SHARE_USE_STAGING_B2ACCESS=${USE_STAGING_B2ACCESS}"
             - "B2SHARE_SECRET_KEY=${B2SHARE_SECRET_KEY}"
             - "B2SHARE_JSONSCHEMAS_HOST=${B2SHARE_JSONSCHEMAS_HOST}"
             - "INIT_DB_AND_INDEX=${INIT_DB_AND_INDEX}"
@@ -35,6 +35,7 @@ services:
             - "B2SHARE_CELERY_RESULT_BACKEND='redis://redis:6379/2'"
             - "B2SHARE_SEARCH_ELASTIC_HOSTS='elasticsearch'"
             - "B2SHARE_LOGGING_LEVEL=${B2SHARE_LOGGING_LEVEL}"
+            - "B2SHARE_CONFIG_ENABLE_B2ACCESS=1"
         volumes:
             - "${B2SHARE_DATADIR}/b2share-data:/usr/var/b2share-instance"
             - "./elasticsearch/mappings/record-view:/usr/local/lib/python3.6/site-packages/invenio_stats/contrib/record_view/v2"
